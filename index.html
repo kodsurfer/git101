@@ -1,11 +1,619 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Designer Profle</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Git & GitHub для студентов-дизайнеров</title>
+  <style>
+    :root{
+      --bg:#0f1115;
+      --panel:#171a21;
+      --card:#1d2129;
+      --text:#f5f7fb;
+      --muted:#aeb6c5;
+      --border:#303746;
+      --accent:#7c5cff;
+      --accent-bg:#2a214f;
+      --green:#55c271;
+      --orange:#f0a44b;
+      --blue:#5fa8ff;
+      --pink:#e86fb4;
+      --danger:#ef6a6a;
+      --radius:22px;
+      --shadow:0 12px 40px rgba(0,0,0,.24);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(124,92,255,.12), transparent 34%),
+        radial-gradient(circle at top right, rgba(95,168,255,.08), transparent 26%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.5;
+    }
+    button,input{font:inherit}
+    button{cursor:pointer}
+    button:disabled{cursor:not-allowed;opacity:.45}
+    .wrap{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:34px 0 70px}
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center;margin-bottom:28px}
+    .eyebrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+    .tag{border:1px solid var(--border);border-radius:999px;padding:6px 10px;color:var(--muted);font-size:12px}
+    h1,h2,h3{margin:0;line-height:1.1}
+    h1{font-size:clamp(34px,6vw,68px);max-width:850px}
+    h2{font-size:clamp(24px,3vw,38px)}
+    h3{font-size:20px}
+    p{margin:0}
+    .lead{font-size:18px;color:var(--muted);max-width:760px;margin-top:18px}
+    .card,.panel{
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:rgba(23,26,33,.88);
+      box-shadow:var(--shadow);
+    }
+    .card{padding:22px}
+    .panel{padding:24px;margin-top:22px}
+    .mini-stack{display:grid;gap:10px;margin-top:16px}
+    .file{padding:11px 13px;border:1px solid var(--border);border-radius:14px;color:var(--muted);background:var(--card)}
+    .file.good{background:var(--accent-bg);color:var(--text);border-color:rgba(124,92,255,.55)}
+    .section-head{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
+    .section-sub{color:var(--muted);margin-top:8px}
+    .btn{
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:transparent;
+      color:var(--text);
+      min-height:44px;
+      padding:10px 15px;
+      transition:.2s ease;
+    }
+    .btn.primary{background:var(--accent-bg);border-color:var(--accent)}
+    .btn:hover:not(:disabled){transform:translateY(-1px);border-color:#536079}
+    .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .zone{
+      min-height:168px;border:1px solid var(--border);border-radius:18px;padding:18px;
+      background:var(--card);opacity:.58;transform:translateY(0);transition:.35s ease
+    }
+    .zone.active{opacity:1;transform:translateY(-5px);border-color:var(--accent);box-shadow:0 0 0 1px rgba(124,92,255,.12) inset}
+    .zone-top{display:flex;justify-content:space-between;gap:10px}
+    .zone small{color:var(--muted)}
+    .zone p{color:var(--muted);font-size:14px;margin-top:12px}
+    .chip{margin-top:18px;border:1px solid var(--border);border-radius:13px;padding:10px 12px;font-size:14px}
+    .actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+    .explain{margin-top:14px;border:1px solid var(--border);border-radius:14px;padding:13px 15px;color:var(--muted)}
+    .two{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+    .graph-wrap{overflow:auto;margin-top:12px}
+    svg{width:100%;min-width:620px;height:auto;display:block}
+    .compare{display:grid;gap:18px;margin-top:20px}
+    .compare-item{border-left:4px solid var(--blue);padding-left:16px}
+    .compare-item:nth-child(2){border-color:var(--pink)}
+    .compare-item p{color:var(--muted);margin-top:6px}
+    code{background:#0f1218;border:1px solid var(--border);border-radius:8px;padding:2px 6px}
+    .workflow{display:grid;grid-template-columns:.85fr 1.15fr;gap:22px}
+    .order-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .order-btn.selected{background:var(--accent-bg);border-color:var(--accent)}
+    .quiz{display:grid;gap:22px;margin-top:20px}
+    .option{
+      display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid var(--border);
+      border-radius:13px;margin-top:9px;background:var(--card)
+    }
+    .option.correct{border-color:var(--green)}
+    .option.wrong{border-color:var(--danger)}
+    .score{border:1px solid var(--border);padding:6px 10px;border-radius:999px;color:var(--muted);white-space:nowrap}
+    .three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+    .step-card{border:1px solid var(--border);border-radius:18px;padding:17px;background:var(--panel)}
+    .step-card .num{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+    .step-card b{display:block;margin-top:6px}
+    .step-card p{color:var(--muted);font-size:14px;margin-top:5px}
+    .collab{
+      display:grid;grid-template-columns:1fr 80px 1fr;align-items:center;gap:12px;margin-top:18px
+    }
+    .person{
+      border:1px solid var(--border);border-radius:18px;padding:18px;background:var(--card);min-height:160px
+    }
+    .person .avatar{
+      width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--accent-bg);
+      margin-bottom:12px;font-weight:700
+    }
+    .arrow{text-align:center;color:var(--muted);font-size:28px}
+    .timeline{display:grid;gap:12px;margin-top:18px}
+    .timeline-row{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:center}
+    .timeline-label{font-weight:700}
+    .timeline-bar{height:12px;border-radius:999px;background:#242a35;overflow:hidden}
+    .timeline-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--blue));transition:width .6s ease}
+    .pr-box{
+      margin-top:18px;border:1px solid var(--border);border-radius:18px;padding:18px;background:linear-gradient(180deg,#1d2129,#181b22)
+    }
+    .pr-title{display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .status{font-size:12px;padding:6px 10px;border-radius:999px;background:#183821;color:#9be1ab;border:1px solid #315f3a}
+    .status.closed{background:#3c2020;color:#f2a2a2;border-color:#6d3535}
+    .review-log{display:grid;gap:8px;margin-top:14px}
+    .review-line{border-left:3px solid var(--border);padding-left:12px;color:var(--muted)}
+    .terminal{
+      background:#0d0f13;border:1px solid var(--border);border-radius:16px;padding:16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      color:#cfe4d4;overflow:auto;min-height:155px
+    }
+    .terminal .muted{color:#7e8a97}
+    .terminal .prompt{color:#8eb7ff}
+    .footer-note{margin-top:22px;color:var(--muted);text-align:center;font-size:14px}
+    @media(max-width:900px){
+      .hero,.two,.workflow{grid-template-columns:1fr}
+      .grid4{grid-template-columns:repeat(2,1fr)}
+      .three{grid-template-columns:1fr}
+      .collab{grid-template-columns:1fr}
+      .arrow{transform:rotate(90deg)}
+    }
+    @media(max-width:620px){
+      .wrap{width:min(100% - 20px,1180px);padding-top:18px}
+      .grid4,.order-grid{grid-template-columns:1fr}
+      .timeline-row{grid-template-columns:1fr}
+      .panel,.card{padding:18px}
+      h1{font-size:40px}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+    }
+  </style>
 </head>
 <body>
-    
+  <main class="wrap" id="app">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">
+          <span class="tag">Git</span>
+          <span class="tag">GitHub</span>
+          <span class="tag">для студентов-дизайнеров</span>
+        </div>
+        <h1>Git — это история изменений проекта</h1>
+        <p class="lead">
+          Представь макет сайта. Вместо <b>final.html</b>, <b>final-2.html</b> и <b>final-really-final.html</b>
+          Git хранит осмысленную историю версий, а GitHub помогает команде работать над ней вместе.
+        </p>
+      </div>
+      <div class="card">
+        <b>Без Git → с Git</b>
+        <div class="mini-stack">
+          <div class="file">landing_final.html</div>
+          <div class="file">landing_final_2.html</div>
+          <div class="file" style="text-decoration:line-through;opacity:.55">landing_final_really_final.html</div>
+          <div style="text-align:center;font-size:24px">↓</div>
+          <div class="file good">Один проект → понятная история коммитов</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <h2>1. Где живут изменения?</h2>
+          <p class="section-sub">Нажимай на этапы и смотри, как файл движется от редактирования до GitHub.</p>
+        </div>
+        <button class="btn" id="reset-flow">Сбросить</button>
+      </div>
+
+      <div class="grid4">
+        <article class="zone active" data-zone="0">
+          <div class="zone-top"><b>Рабочая папка</b><small>Working tree</small></div>
+          <p>Ты меняешь HTML, CSS, изображения и тексты.</p>
+          <div class="chip">🎨 index.html</div>
+        </article>
+        <article class="zone" data-zone="1">
+          <div class="zone-top"><b>Подготовлено</b><small>Staging</small></div>
+          <p>Git знает, какие изменения войдут в следующий снимок.</p>
+        </article>
+        <article class="zone" data-zone="2">
+          <div class="zone-top"><b>Локальный Git</b><small>Repository</small></div>
+          <p>Коммит становится частью истории проекта.</p>
+        </article>
+        <article class="zone" data-zone="3">
+          <div class="zone-top"><b>GitHub</b><small>Remote</small></div>
+          <p>Удалённая копия проекта становится доступна команде.</p>
+        </article>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary flow-btn" data-step="1">1 · git add</button>
+        <button class="btn flow-btn" data-step="2" disabled>2 · git commit</button>
+        <button class="btn flow-btn" data-step="3" disabled>3 · git push</button>
+      </div>
+      <div class="explain" id="flow-explain">Сейчас файл изменён только на твоём компьютере. Нажми <b>git add</b>.</div>
+    </section>
+
+    <section class="two">
+      <div class="panel">
+        <div class="section-head">
+          <div>
+            <h2>2. Ветки как параллельные версии идеи</h2>
+            <p class="section-sub">Основная версия сайта остаётся стабильной, пока ты экспериментируешь.</p>
+          </div>
+          <button class="btn primary" id="branch-action">Создать feature/hero</button>
+        </div>
+
+        <div class="graph-wrap">
+          <svg viewBox="0 0 650 250" aria-label="Граф веток Git">
+            <line x1="75" y1="155" x2="555" y2="155" stroke="#303746" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="90" cy="155" r="14" fill="#5fa8ff"/>
+            <circle cx="220" cy="155" r="14" fill="#5fa8ff"/>
+            <circle cx="350" cy="155" r="14" fill="#5fa8ff"/>
+            <circle cx="520" cy="155" r="14" fill="#5fa8ff"/>
+            <text x="72" y="190" fill="#aeb6c5" font-size="14">initial</text>
+            <text x="193" y="190" fill="#aeb6c5" font-size="14">layout</text>
+            <text x="324" y="190" fill="#aeb6c5" font-size="14">colors</text>
+            <text x="492" y="190" fill="#aeb6c5" font-size="14">main</text>
+            <text x="75" y="225" fill="#f5f7fb" font-size="14" font-weight="600">main</text>
+
+            <g id="feature-path" opacity="0">
+              <path d="M350 155 C390 155 390 70 435 70 L555 70" fill="none" stroke="#e86fb4" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="435" cy="70" r="14" fill="#e86fb4"/>
+              <circle cx="545" cy="70" r="14" fill="#e86fb4"/>
+              <text x="410" y="45" fill="#f5f7fb" font-size="14" font-weight="600">feature/hero</text>
+              <text x="411" y="105" fill="#aeb6c5" font-size="13">new hero</text>
+            </g>
+            <g id="merge-path" opacity="0">
+              <path d="M545 70 C590 70 590 155 520 155" fill="none" stroke="#e86fb4" stroke-width="4" stroke-dasharray="7 7"/>
+              <circle cx="520" cy="155" r="19" fill="none" stroke="#e86fb4" stroke-width="3"/>
+            </g>
+          </svg>
+        </div>
+        <div class="explain" id="branch-caption">Сейчас есть только ветка <b>main</b> — основная версия проекта.</div>
+      </div>
+
+      <aside class="panel">
+        <h2>Git ≠ GitHub</h2>
+        <div class="compare">
+          <div class="compare-item">
+            <b>Git</b>
+            <p>Система контроля версий. Может работать полностью локально без интернета.</p>
+          </div>
+          <div class="compare-item">
+            <b>GitHub</b>
+            <p>Сервис для хранения Git-репозиториев, совместной работы, review и публикации проектов.</p>
+          </div>
+        </div>
+        <div class="explain"><b>Аналогия:</b><br>Git — история версий.<br>GitHub — общее пространство команды.</div>
+      </aside>
+    </section>
+
+    <section class="panel">
+      <div class="workflow">
+        <div>
+          <h2>3. Собери правильный workflow</h2>
+          <p class="section-sub">Ты изменил дизайн страницы и хочешь отправить новую версию на GitHub.</p>
+          <div class="explain"><b>Подсказка:</b><br>выбрать изменения → сохранить снимок → отправить на сервер.</div>
+        </div>
+        <div>
+          <div class="order-grid" id="order-buttons">
+            <button class="btn order-btn" data-command="commit">git commit</button>
+            <button class="btn order-btn" data-command="push">git push</button>
+            <button class="btn order-btn" data-command="add">git add</button>
+          </div>
+          <div class="actions">
+            <span class="section-sub">Твой порядок:</span>
+            <b id="order-result">—</b>
+            <button class="btn" id="order-reset" style="margin-left:auto">Начать заново</button>
+          </div>
+          <div class="explain" id="order-feedback">Нажми команды в правильной последовательности.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <h2>4. Clone и Pull: как получить проект и обновления</h2>
+          <p class="section-sub">Это два разных действия: один раз забрать проект и потом регулярно подтягивать изменения.</p>
+        </div>
+        <button class="btn primary" id="sync-demo">Запустить демонстрацию</button>
+      </div>
+
+      <div class="collab">
+        <div class="person">
+          <div class="avatar">A</div>
+          <b>GitHub</b>
+          <p class="section-sub">Общий репозиторий команды.</p>
+          <div class="terminal" id="remote-terminal">
+            <div><span class="muted">$</span> repo: portfolio-site</div>
+            <div>main → commit #A12</div>
+          </div>
+        </div>
+        <div class="arrow">⇄</div>
+        <div class="person">
+          <div class="avatar">D</div>
+          <b>Компьютер дизайнера</b>
+          <p class="section-sub">Локальная копия проекта.</p>
+          <div class="terminal" id="local-terminal">
+            <div><span class="prompt">$</span> пока пусто</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-row">
+          <div class="timeline-label">git clone</div>
+          <div class="timeline-bar"><div class="timeline-fill" id="clone-bar"></div></div>
+        </div>
+        <div class="timeline-row">
+          <div class="timeline-label">git pull</div>
+          <div class="timeline-bar"><div class="timeline-fill" id="pull-bar"></div></div>
+        </div>
+      </div>
+
+      <div class="explain" id="sync-explain">
+        <b>git clone</b> — первый раз скачивает репозиторий целиком. <b>git pull</b> — позже подтягивает новые изменения.
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <h2>5. Pull Request как дизайн-review для кода</h2>
+          <p class="section-sub">Ты сделал новую версию блока, показываешь команде, получаешь комментарии и только потом сливаешь в main.</p>
+        </div>
+        <button class="btn primary" id="pr-action">Открыть Pull Request</button>
+      </div>
+
+      <div class="pr-box">
+        <div class="pr-title">
+          <div>
+            <b>#42 New hero section</b>
+            <div class="section-sub">feature/hero → main</div>
+          </div>
+          <span class="status" id="pr-status">Draft</span>
+        </div>
+        <div class="review-log" id="review-log">
+          <div class="review-line">Pull Request ещё не открыт.</div>
+        </div>
+      </div>
+
+      <div class="three">
+        <div class="step-card">
+          <div class="num">Шаг 01</div>
+          <b>Открыть PR</b>
+          <p>Показать, какие изменения предлагаются.</p>
+        </div>
+        <div class="step-card">
+          <div class="num">Шаг 02</div>
+          <b>Получить review</b>
+          <p>Комментарий можно оставить прямо рядом с кодом.</p>
+        </div>
+        <div class="step-card">
+          <div class="num">Шаг 03</div>
+          <b>Merge</b>
+          <p>После проверки изменения попадают в main.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <h2>6. Мини-квиз</h2>
+          <p class="section-sub">Проверь ключевые понятия.</p>
+        </div>
+        <div class="score" id="quiz-score">0 / 4</div>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <fieldset data-answer="b">
+          <legend><b>1. Что делает git commit?</b></legend>
+          <label class="option"><input type="radio" name="q1" value="a"> Создаёт аккаунт GitHub</label>
+          <label class="option"><input type="radio" name="q1" value="b"> Сохраняет снимок выбранных изменений</label>
+        </fieldset>
+
+        <fieldset data-answer="a">
+          <legend><b>2. Где Git может работать без GitHub?</b></legend>
+          <label class="option"><input type="radio" name="q2" value="a"> Локально на компьютере</label>
+          <label class="option"><input type="radio" name="q2" value="b"> Нигде</label>
+        </fieldset>
+
+        <fieldset data-answer="b">
+          <legend><b>3. Зачем нужна отдельная ветка?</b></legend>
+          <label class="option"><input type="radio" name="q3" value="a"> Чтобы удалить main</label>
+          <label class="option"><input type="radio" name="q3" value="b"> Чтобы изолированно делать новую работу</label>
+        </fieldset>
+
+        <fieldset data-answer="a">
+          <legend><b>4. Что обычно идёт после review Pull Request?</b></legend>
+          <label class="option"><input type="radio" name="q4" value="a"> Merge</label>
+          <label class="option"><input type="radio" name="q4" value="b"> Удаление GitHub</label>
+        </fieldset>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="quiz-check">Проверить</button>
+        <button class="btn" id="quiz-reset">Сбросить</button>
+      </div>
+      <div class="explain" id="quiz-feedback">Выбери ответы и нажми «Проверить».</div>
+    </section>
+
+    <div class="three">
+      <div class="step-card">
+        <div class="num">База</div>
+        <b>Изменить</b>
+        <p>HTML, CSS, изображения, тексты.</p>
+      </div>
+      <div class="step-card">
+        <div class="num">Git</div>
+        <b>Зафиксировать</b>
+        <p><code>git add</code> → <code>git commit</code></p>
+      </div>
+      <div class="step-card">
+        <div class="num">GitHub</div>
+        <b>Поделиться</b>
+        <p><code>git push</code> → review → merge</p>
+      </div>
+    </div>
+
+    <div class="footer-note">Интерактивная учебная страница по теме Git и GitHub для студентов-дизайнеров.</div>
+  </main>
+
+  <script>
+    (() => {
+      const zones = [...document.querySelectorAll('.zone')];
+      const flowButtons = [...document.querySelectorAll('.flow-btn')];
+      const flowExplain = document.querySelector('#flow-explain');
+      const flowTexts = [
+        'Сейчас файл изменён только на твоём компьютере. Нажми <b>git add</b>.',
+        '<b>git add</b> отправил выбранные изменения в staging area. Это ещё не коммит.',
+        '<b>git commit</b> сохранил локальный снимок проекта в истории Git.',
+        '<b>git push</b> отправил новые коммиты в GitHub. Теперь команда может их получить.'
+      ];
+
+      function setFlow(step){
+        zones.forEach((z,i)=>z.classList.toggle('active',i===step));
+        flowExplain.innerHTML=flowTexts[step];
+        flowButtons.forEach((btn,i)=>{
+          const reached=i<step;
+          const next=i===step;
+          btn.disabled=!(next && step<3);
+          btn.textContent=(reached?'✓ ':((i+1)+' · '))+['git add','git commit','git push'][i];
+          btn.classList.toggle('primary',next);
+        });
+      }
+      flowButtons.forEach((btn,i)=>btn.addEventListener('click',()=>setFlow(i+1)));
+      document.querySelector('#reset-flow').addEventListener('click',()=>setFlow(0));
+      setFlow(0);
+
+      const feature=document.querySelector('#feature-path');
+      const merge=document.querySelector('#merge-path');
+      const branchBtn=document.querySelector('#branch-action');
+      const branchCaption=document.querySelector('#branch-caption');
+      let branchState=0;
+      branchBtn.addEventListener('click',()=>{
+        branchState=(branchState+1)%3;
+        if(branchState===0){
+          feature.style.opacity='0'; merge.style.opacity='0';
+          branchBtn.textContent='Создать feature/hero';
+          branchCaption.innerHTML='Сейчас есть только ветка <b>main</b> — основная версия проекта.';
+        }else if(branchState===1){
+          feature.style.opacity='1'; merge.style.opacity='0';
+          branchBtn.textContent='Слить в main';
+          branchCaption.innerHTML='Новая работа идёт отдельно в <b>feature/hero</b>. Main остаётся стабильной.';
+        }else{
+          feature.style.opacity='1'; merge.style.opacity='1';
+          branchBtn.textContent='Начать заново';
+          branchCaption.innerHTML='Изменения проверены и объединены с <b>main</b>. Это <b>merge</b>.';
+        }
+      });
+
+      const orderButtons=[...document.querySelectorAll('.order-btn')];
+      const orderResult=document.querySelector('#order-result');
+      const orderFeedback=document.querySelector('#order-feedback');
+      let chosen=[];
+      const correct=['add','commit','push'];
+      const labels={add:'git add',commit:'git commit',push:'git push'};
+      function renderOrder(){
+        orderResult.textContent=chosen.length?chosen.map(x=>labels[x]).join(' → '):'—';
+        orderButtons.forEach(btn=>{
+          const used=chosen.includes(btn.dataset.command);
+          btn.disabled=used;
+          btn.classList.toggle('selected',used);
+        });
+        if(chosen.length===3){
+          const ok=chosen.every((x,i)=>x===correct[i]);
+          orderFeedback.innerHTML=ok
+            ? '<b>Верно.</b> add → commit → push.'
+            : '<b>Правильный порядок:</b> git add → git commit → git push.';
+        }else{
+          orderFeedback.textContent='Выбрано команд: '+chosen.length+' из 3.';
+        }
+      }
+      orderButtons.forEach(btn=>btn.addEventListener('click',()=>{
+        if(!chosen.includes(btn.dataset.command)){ chosen.push(btn.dataset.command); renderOrder(); }
+      }));
+      document.querySelector('#order-reset').addEventListener('click',()=>{chosen=[];renderOrder()});
+      renderOrder();
+
+      const cloneBar=document.querySelector('#clone-bar');
+      const pullBar=document.querySelector('#pull-bar');
+      const localTerminal=document.querySelector('#local-terminal');
+      const syncExplain=document.querySelector('#sync-explain');
+      let syncRunning=false;
+      document.querySelector('#sync-demo').addEventListener('click',()=>{
+        if(syncRunning)return;
+        syncRunning=true;
+        cloneBar.style.width='0%'; pullBar.style.width='0%';
+        localTerminal.innerHTML='<div><span class="prompt">$</span> git clone github.com/team/portfolio-site</div>';
+        syncExplain.innerHTML='Шаг 1: <b>git clone</b> скачивает проект целиком.';
+        setTimeout(()=>{
+          cloneBar.style.width='100%';
+          localTerminal.innerHTML+='<div>Cloning into portfolio-site...</div><div>done ✓</div><div><span class="prompt">$</span> local main → #A12</div>';
+        },150);
+        setTimeout(()=>{
+          syncExplain.innerHTML='На GitHub появился новый коммит. Теперь используем <b>git pull</b>.';
+          localTerminal.innerHTML+='<div><span class="prompt">$</span> git pull</div>';
+          pullBar.style.width='100%';
+        },1100);
+        setTimeout(()=>{
+          localTerminal.innerHTML+='<div>Updating #A12 → #B07 ✓</div>';
+          syncExplain.innerHTML='<b>Итог:</b> clone — первый раз, pull — для последующих обновлений.';
+          syncRunning=false;
+        },1800);
+      });
+
+      const prBtn=document.querySelector('#pr-action');
+      const prStatus=document.querySelector('#pr-status');
+      const reviewLog=document.querySelector('#review-log');
+      let prState=0;
+      prBtn.addEventListener('click',()=>{
+        prState=(prState+1)%4;
+        if(prState===0){
+          prStatus.textContent='Draft'; prStatus.classList.remove('closed');
+          reviewLog.innerHTML='<div class="review-line">Pull Request ещё не открыт.</div>';
+          prBtn.textContent='Открыть Pull Request';
+        }else if(prState===1){
+          prStatus.textContent='Open'; prStatus.classList.remove('closed');
+          reviewLog.innerHTML='<div class="review-line">PR открыт: команда видит изменения.</div>';
+          prBtn.textContent='Получить review';
+        }else if(prState===2){
+          prStatus.textContent='Changes requested';
+          reviewLog.innerHTML='<div class="review-line">Комментарий: «Увеличь контраст текста в hero».</div><div class="review-line">Автор вносит правку и push-ит новый commit.</div>';
+          prBtn.textContent='Approve и merge';
+        }else{
+          prStatus.textContent='Merged'; prStatus.classList.add('closed');
+          reviewLog.innerHTML='<div class="review-line">Review пройден.</div><div class="review-line">feature/hero объединена с main.</div>';
+          prBtn.textContent='Начать заново';
+        }
+      });
+
+      const questions=[...document.querySelectorAll('#quiz fieldset')];
+      const score=document.querySelector('#quiz-score');
+      const feedback=document.querySelector('#quiz-feedback');
+      function clearMarks(){
+        document.querySelectorAll('.option').forEach(x=>x.classList.remove('correct','wrong'));
+      }
+      document.querySelector('#quiz-check').addEventListener('click',()=>{
+        clearMarks();
+        let points=0,answered=0;
+        questions.forEach(q=>{
+          const selected=q.querySelector('input:checked');
+          if(!selected)return;
+          answered++;
+          const selectedLabel=selected.closest('.option');
+          if(selected.value===q.dataset.answer){
+            points++; selectedLabel.classList.add('correct');
+          }else{
+            selectedLabel.classList.add('wrong');
+            const right=q.querySelector('input[value="'+q.dataset.answer+'"]');
+            if(right)right.closest('.option').classList.add('correct');
+          }
+        });
+        score.textContent=points+' / 4';
+        feedback.textContent=answered<4
+          ? 'Ответь на все вопросы. Сейчас заполнено: '+answered+' из 4.'
+          : points===4
+            ? 'Отлично. Базовая модель Git и GitHub понятна.'
+            : 'Посмотри правильные ответы и попробуй ещё раз.';
+      });
+      document.querySelector('#quiz-reset').addEventListener('click',()=>{
+        document.querySelectorAll('#quiz input').forEach(i=>i.checked=false);
+        clearMarks();
+        score.textContent='0 / 4';
+        feedback.textContent='Выбери ответы и нажми «Проверить».';
+      });
+    })();
+  </script>
 </body>
 </html>
